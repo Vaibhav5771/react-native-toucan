@@ -63,6 +63,19 @@ This project should feel like a real app, but remain approachable for students.
 
 ---
 
+## Reference Prompts (`prompts/prompts/*.md`) & Our Own Branding
+
+This project is being built by working through a numbered sequence of tutorial-style prompts in `prompts/prompts/` (01-nativewind.md, 02-design-theme.md, 03-onboarding-ui.md, …), paired with reference visuals in `prompt_material/`. Treat these as a **structural roadmap** — what feature to build next, and roughly what layout/flow to replicate — not as literal, final instructions to copy verbatim.
+
+At every phase, the user adds their own touch on top of the base prompt: their own branding, naming, color choices, copy, and asset swaps. Concretely:
+
+- The tutorial's placeholder branding (e.g. app name "Lingua"/"Muolingo", the fox mascot, the purple/blue/green palette) is **not** this project's actual brand. The real brand is **Tucana** — a toucan mascot with a cool teal/blue design system. Don't reintroduce the tutorial's placeholder name, mascot, or colors just because a prompt file or reference image says so.
+- Before applying a name, color, or asset mentioned in a `prompts/prompts/*.md` file, check whether the user has already made a branding decision that supersedes it (check memory / recent conversation), and default to the established brand.
+- Expect the user to redirect, tweak, or restyle each phase's output after the base implementation lands — that's the intended workflow, not a sign something went wrong. Build the base feature from the prompt first, then be ready to iterate on their specific feedback.
+- When a prompt file's literal instructions (naming, exact copy, a specific asset) conflict with the project's actual settled branding, flag the conflict and ask rather than silently picking one.
+
+---
+
 ## Decision Making & Clarifications
 
 If something is unclear or could be improved:
