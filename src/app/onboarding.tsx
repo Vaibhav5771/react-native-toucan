@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -5,6 +6,8 @@ import { Image } from "@/components/image";
 import { images } from "@/constants/images";
 
 export default function Onboarding() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View className="flex-1 justify-between px-screen pb-6 pt-2">
@@ -48,7 +51,10 @@ export default function Onboarding() {
           </View>
         </View>
 
-        <Pressable className="flex-row items-center justify-center gap-2 rounded-pill bg-tucana-teal py-4 active:opacity-80">
+        <Pressable
+          onPress={() => router.push("/sign-up")}
+          className="flex-row items-center justify-center gap-2 rounded-pill bg-tucana-teal py-4 active:opacity-80"
+        >
           <Text className="font-poppins-semibold text-body-lg text-background">Get Started</Text>
           <Text className="font-poppins-semibold text-body-lg text-background">›</Text>
         </Pressable>
