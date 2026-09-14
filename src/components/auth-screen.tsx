@@ -1,3 +1,4 @@
+import { useSignIn, useSignUp, useSSO } from "@clerk/expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
@@ -41,17 +42,75 @@ const COPY: Record<
   },
 };
 
+const SOCIAL_PROVIDERS = [
+  { strategy: "oauth_google", icon: "google", iconColor: "#EA4335", label: "Continue with Google" },
+] as const;
+
 export function AuthScreen({ mode }: { mode: AuthMode }) {
   const router = useRouter();
   const copy = COPY[mode];
 
+  const { signUp, errors: signUpErrors, fetchStatus: signUpFetchStatus } = useSignUp();
+  const { signIn, errors: signInErrors, fetchStatus: signInFetchStatus } = useSignIn();
+  const { startSSOFlow } = useSSO();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [socialError, setSocialError] = useState<string | null>(null);
 
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleSubmit = () => setIsVerifying(true);
+  const fetchStatus = mode === "sign-up" ? signUpFetchStatus : signInFetchStatus;
+  const isSubmitting = fetchStatus === "fetching";
+
+  const handleSubmit = async () => {
+    setSocialError(null);
+
+    if (mode === "sign-up") {
+      const { error } = await signUp.password({ emailAddress: email, password });
+      if (error) return;
+
+      const { error: codeError } = await signUp.verifications.sendEmailCode();
+      if (codeError) return;
+    } else {
+      const { error } = await signIn.emailCode.sendCode({ emailAddress: email });
+      if (error) return;
+    }
+
+    setIsVerifying(true);
+  };
+
+  const handleVerify = async (code: string) => {
+    if (mode === "sign-up") {
+      const { error } = await signUp.verifications.verifyEmailCode({ code });
+      if (error) return { error: error.longMessage ?? error.message };
+
+      if (signUp.status === "complete") {
+        await signUp.finalize({ navigate: () => router.replace("/") });
+      }
+    } else {
+      const { error } = await signIn.emailCode.verifyCode({ code });
+      if (error) return { error: error.longMessage ?? error.message };
+
+      if (signIn.status === "complete") {
+        await signIn.finalize({ navigate: () => router.replace("/") });
+      }
+    }
+  };
+
+  const handleSocialAuth = async (strategy: (typeof SOCIAL_PROVIDERS)[number]["strategy"]) => {
+    setSocialError(null);
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({ strategy });
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+        router.replace("/");
+      }
+    } catch {
+      setSocialError("Something went wrong. Please try again.");
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -94,6 +153,11 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
             submitBehavior={mode === "sign-up" ? "submit" : "blurAndSubmit"}
             value={email}
             onChangeText={setEmail}
+            error={
+              mode === "sign-up"
+                ? signUpErrors.fields.emailAddress?.message
+                : signInErrors.fields.identifier?.message
+            }
           />
 
           {mode === "sign-up" && (
@@ -108,17 +172,21 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
               onSubmitEditing={handleSubmit}
               value={password}
               onChangeText={setPassword}
+              error={signUpErrors.fields.password?.message}
             />
           )}
 
           <Pressable
             onPress={handleSubmit}
-            className="items-center justify-center rounded-pill bg-tucana-teal py-4 active:opacity-80"
+            disabled={isSubmitting}
+            className="items-center justify-center rounded-pill bg-tucana-teal py-4 active:opacity-80 disabled:opacity-60"
           >
             <Text className="font-poppins-semibold text-body-lg text-background">
               {copy.submitLabel}
             </Text>
           </Pressable>
+
+          {mode === "sign-up" && <View nativeID="clerk-captcha" />}
         </View>
 
         <View className="flex-row items-center gap-3">
@@ -128,13 +196,18 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
         </View>
 
         <View className="gap-3">
-          <SocialAuthButton icon="logo-google" iconColor="#EA4335" label="Continue with Google" />
-          <SocialAuthButton
-            icon="logo-facebook"
-            iconColor="#1877F2"
-            label="Continue with Facebook"
-          />
-          <SocialAuthButton icon="logo-apple" iconColor="#10151f" label="Continue with Apple" />
+          {socialError && (
+            <Text className="text-center text-caption text-error">{socialError}</Text>
+          )}
+          {SOCIAL_PROVIDERS.map((provider) => (
+            <SocialAuthButton
+              key={provider.strategy}
+              icon={provider.icon}
+              iconColor={provider.iconColor}
+              label={provider.label}
+              onPress={() => handleSocialAuth(provider.strategy)}
+            />
+          ))}
         </View>
 
         <View className="flex-row flex-wrap items-center justify-center gap-1 pt-2">
@@ -150,6 +223,7 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
       <VerificationModal
         visible={isVerifying}
         email={email || "your email"}
+        onVerify={handleVerify}
         onClose={() => setIsVerifying(false)}
       />
     </SafeAreaView>

@@ -1,5 +1,4 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -17,26 +16,39 @@ const CODE_LENGTH = 6;
 type VerificationModalProps = {
   visible: boolean;
   email: string;
+  onVerify: (code: string) => Promise<{ error?: string } | void>;
   onClose: () => void;
 };
 
-export function VerificationModal({ visible, email, onClose }: VerificationModalProps) {
-  const router = useRouter();
+export function VerificationModal({ visible, email, onVerify, onClose }: VerificationModalProps) {
   const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<TextInput>(null);
 
   const handleShow = () => {
     setCode("");
+    setError(null);
     setTimeout(() => inputRef.current?.focus(), 300);
   };
 
-  const handleChangeCode = (text: string) => {
+  const handleChangeCode = async (text: string) => {
     const digits = text.replace(/[^0-9]/g, "").slice(0, CODE_LENGTH);
     setCode(digits);
+    setError(null);
 
     if (digits.length === CODE_LENGTH) {
+      setIsSubmitting(true);
+      const result = await onVerify(digits);
+      setIsSubmitting(false);
+
+      if (result?.error) {
+        setError(result.error);
+        setCode("");
+        return;
+      }
+
       onClose();
-      router.replace("/");
     }
   };
 
@@ -70,22 +82,32 @@ export function VerificationModal({ visible, email, onClose }: VerificationModal
             onPress={() => inputRef.current?.focus()}
             className="flex-row justify-center gap-3"
           >
-            {Array.from({ length: CODE_LENGTH }).map((_, index) => (
-              <View
-                key={index}
-                className={`h-14 w-11 items-center justify-center rounded-input border ${
-                  index === code.length ? "border-tucana-teal-deep" : "border-border"
-                }`}
-              >
-                <Text className="font-poppins-semibold text-h3 text-ink">{code[index] ?? ""}</Text>
-              </View>
-            ))}
+            {Array.from({ length: CODE_LENGTH }).map((_, index) => {
+              let borderClassName = "border-border";
+              if (error) {
+                borderClassName = "border-error";
+              } else if (index === code.length) {
+                borderClassName = "border-tucana-teal-deep";
+              }
+
+              return (
+                <View
+                  key={index}
+                  className={`h-14 w-11 items-center justify-center rounded-input border ${borderClassName}`}
+                >
+                  <Text className="font-poppins-semibold text-h3 text-ink">{code[index] ?? ""}</Text>
+                </View>
+              );
+            })}
           </Pressable>
+
+          {error && <Text className="text-center text-caption text-error">{error}</Text>}
 
           <TextInput
             ref={inputRef}
             value={code}
             onChangeText={handleChangeCode}
+            editable={!isSubmitting}
             keyboardType="number-pad"
             maxLength={CODE_LENGTH}
             style={styles.hiddenInput}

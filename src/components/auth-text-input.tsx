@@ -23,37 +23,39 @@ export const AuthTextInput = forwardRef<TextInput, AuthTextInputProps>(function 
 
   return (
     <View className="gap-1.5">
-      <Text className="text-caption text-ink-muted">{label}</Text>
       <View
-        className={`flex-row items-center rounded-input border bg-surface px-4 py-3.5 ${borderClassName}`}
+        className={`rounded-input border bg-surface px-4 pb-2.5 pt-3 ${borderClassName}`}
       >
-        <TextInput
-          ref={ref}
-          className="flex-1 font-poppins-regular text-body-lg text-ink"
-          placeholderTextColor="#94a3b8"
-          secureTextEntry={secureTextEntry && !isValueVisible}
-          onFocus={(event) => {
-            setIsFocused(true);
-            onFocus?.(event);
-          }}
-          onBlur={(event) => {
-            setIsFocused(false);
-            onBlur?.(event);
-          }}
-          {...inputProps}
-        />
-        {secureTextEntry && (
-          <Pressable
-            onPress={() => setIsValueVisible((prev) => !prev)}
-            className="-mr-2 h-11 w-11 items-center justify-center active:opacity-60"
-          >
-            <Ionicons
-              name={isValueVisible ? "eye-outline" : "eye-off-outline"}
-              size={20}
-              color="#64748b"
-            />
-          </Pressable>
-        )}
+        <Text className="text-caption text-ink-muted">{label}</Text>
+        <View className="flex-row items-center">
+          <TextInput
+            ref={ref}
+            className="flex-1 font-poppins-regular text-body-lg text-ink"
+            placeholderTextColor="#94a3b8"
+            secureTextEntry={secureTextEntry && !isValueVisible}
+            onFocus={(event) => {
+              setIsFocused(true);
+              onFocus?.(event);
+            }}
+            onBlur={(event) => {
+              setIsFocused(false);
+              onBlur?.(event);
+            }}
+            {...inputProps}
+          />
+          {secureTextEntry && (
+            <Pressable
+              onPress={() => setIsValueVisible((prev) => !prev)}
+              className="-mr-2 h-11 w-11 items-center justify-center active:opacity-60"
+            >
+              <Ionicons
+                name={isValueVisible ? "eye-outline" : "eye-off-outline"}
+                size={20}
+                color="#64748b"
+              />
+            </Pressable>
+          )}
+        </View>
       </View>
       {error && <Text className="text-caption text-error">{error}</Text>}
     </View>
