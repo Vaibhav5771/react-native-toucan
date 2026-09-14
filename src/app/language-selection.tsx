@@ -8,10 +8,12 @@ import { Image } from "@/components/image";
 import { PrimaryButton } from "@/components/primary-button";
 import { images } from "@/constants/images";
 import { languages } from "@/data/languages";
+import { useLanguageStore } from "@/store/language";
 import type { LanguageId } from "@/types/learning";
 
 export default function LanguageSelectionScreen() {
   const [selectedLanguageId, setSelectedLanguageId] = useState<LanguageId>("spanish");
+  const setStoredLanguage = useLanguageStore((state) => state.setSelectedLanguage);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }} edges={["top", "bottom"]}>
@@ -77,7 +79,10 @@ export default function LanguageSelectionScreen() {
 
           <PrimaryButton
             accessibilityLabel="Confirm selected language"
-            onPress={() => router.replace("/")}
+            onPress={() => {
+              setStoredLanguage(selectedLanguageId);
+              router.replace("/");
+            }}
             label="Continue"
             className="mt-6"
           />
