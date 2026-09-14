@@ -13,6 +13,7 @@ export interface Language {
   code: string;
   flag: string;
   description: string;
+  greeting: string;
 }
 
 export interface Unit {

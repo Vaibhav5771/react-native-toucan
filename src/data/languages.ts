@@ -8,6 +8,7 @@ export const languages: Language[] = [
     code: "es",
     flag: "https://flagcdn.com/w320/es.png",
     description: "Start with friendly greetings and everyday phrases.",
+    greeting: "Hola",
   },
   {
     id: "french",
@@ -16,6 +17,7 @@ export const languages: Language[] = [
     code: "fr",
     flag: "https://flagcdn.com/w320/fr.png",
     description: "Learn useful French for meeting new people.",
+    greeting: "Bonjour",
   },
   {
     id: "japanese",
@@ -24,5 +26,6 @@ export const languages: Language[] = [
     code: "ja",
     flag: "https://flagcdn.com/w320/jp.png",
     description: "Build a simple foundation with polite expressions.",
+    greeting: "こんにちは",
   },
 ];
