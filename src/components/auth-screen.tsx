@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AuthTextInput } from "@/components/auth-text-input";
 import { Image } from "@/components/image";
+import { PrimaryButton } from "@/components/primary-button";
 import { SocialAuthButton } from "@/components/social-auth-button";
 import { VerificationModal } from "@/components/verification-modal";
 import { images } from "@/constants/images";
@@ -176,15 +177,11 @@ export function AuthScreen({ mode }: { mode: AuthMode }) {
             />
           )}
 
-          <Pressable
+          <PrimaryButton
             onPress={handleSubmit}
             disabled={isSubmitting}
-            className="items-center justify-center rounded-pill bg-tucana-teal py-4 active:opacity-80 disabled:opacity-60"
-          >
-            <Text className="font-poppins-semibold text-body-lg text-background">
-              {copy.submitLabel}
-            </Text>
-          </Pressable>
+            label={copy.submitLabel}
+          />
 
           {mode === "sign-up" && <View nativeID="clerk-captcha" />}
         </View>

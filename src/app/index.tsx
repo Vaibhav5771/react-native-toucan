@@ -23,6 +23,9 @@ export default function Index() {
       <Link href="/onboarding" className="font-poppins-semibold text-body-md text-tucana-teal-deep">
         View onboarding
       </Link>
+      <Link href="/language-selection" className="font-poppins-semibold text-body-md text-tucana-teal-deep">
+        Choose a language
+      </Link>
       <Pressable
         onPress={() => signOut()}
         className="rounded-pill border border-tucana-teal-deep px-6 py-3 active:opacity-70"

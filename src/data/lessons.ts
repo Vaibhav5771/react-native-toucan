@@ -1,0 +1,151 @@
+import type { Lesson } from "@/types/learning";
+
+export const lessons: Lesson[] = [
+  {
+    id: "spanish-hello",
+    unitId: "spanish-foundations",
+    languageId: "spanish",
+    order: 1,
+    title: "Say hello in Spanish",
+    description: "Learn a warm greeting and introduce yourself.",
+    goals: [
+      { id: "spanish-hello-goal-1", text: "Greet someone in Spanish" },
+      { id: "spanish-hello-goal-2", text: "Say your name" },
+    ],
+    vocabulary: [
+      { id: "hola", word: "hola", translation: "hello", partOfSpeech: "greeting" },
+      { id: "gracias", word: "gracias", translation: "thank you", partOfSpeech: "expression" },
+      { id: "nombre", word: "nombre", translation: "name", partOfSpeech: "noun" },
+    ],
+    phrases: [
+      { id: "spanish-good-morning", text: "Buenos días", translation: "Good morning", pronunciation: "BWEH-nos DEE-as" },
+      { id: "spanish-my-name", text: "Me llamo Tucana", translation: "My name is Tucana", pronunciation: "meh YAH-moh Tucana" },
+    ],
+    activities: [
+      {
+        id: "spanish-hello-choice",
+        type: "multiple-choice",
+        prompt: "How do you say hello?",
+        options: ["Hola", "Gracias", "Adiós"],
+        answer: "Hola",
+        points: 10,
+      },
+      {
+        id: "spanish-name-translation",
+        type: "translation",
+        prompt: "Translate this phrase.",
+        sourceText: "My name is Tucana",
+        acceptedAnswers: ["Me llamo Tucana"],
+        hint: "Start with “Me llamo”.",
+        points: 10,
+      },
+      {
+        id: "spanish-good-morning-speaking",
+        type: "speaking",
+        prompt: "Say this phrase aloud.",
+        phraseId: "spanish-good-morning",
+        targetText: "Buenos días",
+        points: 10,
+      },
+    ],
+    aiTeacherPrompt: {
+      role: "A friendly beginner Spanish teacher",
+      objective: "Help the learner practice greetings and saying their name.",
+      systemPrompt: "Use simple Spanish with English support when needed. Ask one short question at a time, celebrate effort, and gently correct pronunciation or word choice.",
+      openingMessage: "¡Hola! I’m your Spanish teacher. Let’s practice saying hello!",
+      suggestedTopics: ["greetings", "names", "polite expressions"],
+    },
+  },
+  {
+    id: "french-hello",
+    unitId: "french-foundations",
+    languageId: "french",
+    order: 1,
+    title: "Say hello in French",
+    description: "Practice a greeting, thanks, and a simple introduction.",
+    goals: [
+      { id: "french-hello-goal-1", text: "Use a French greeting" },
+      { id: "french-hello-goal-2", text: "Introduce yourself politely" },
+    ],
+    vocabulary: [
+      { id: "bonjour", word: "bonjour", translation: "hello / good morning", partOfSpeech: "greeting" },
+      { id: "merci", word: "merci", translation: "thank you", partOfSpeech: "expression" },
+      { id: "ami", word: "ami", translation: "friend", partOfSpeech: "noun" },
+    ],
+    phrases: [
+      { id: "french-hello", text: "Bonjour", translation: "Hello", pronunciation: "bohn-ZHOOR" },
+      { id: "french-my-name", text: "Je m'appelle Tucana", translation: "My name is Tucana", pronunciation: "zhuh mah-PELL Tucana" },
+    ],
+    activities: [
+      {
+        id: "french-hello-choice",
+        type: "multiple-choice",
+        prompt: "Which word means hello?",
+        options: ["Merci", "Bonjour", "Ami"],
+        answer: "Bonjour",
+        points: 10,
+      },
+      {
+        id: "french-name-translation",
+        type: "translation",
+        prompt: "Translate this phrase.",
+        sourceText: "My name is Tucana",
+        acceptedAnswers: ["Je m'appelle Tucana"],
+        points: 10,
+      },
+    ],
+    aiTeacherPrompt: {
+      role: "A patient beginner French teacher",
+      objective: "Help the learner practice greetings and a polite introduction.",
+      systemPrompt: "Speak slowly and use beginner-level French. Offer an English explanation after the learner tries, then ask them to repeat the phrase.",
+      openingMessage: "Bonjour! Let’s learn how to introduce yourself in French.",
+      suggestedTopics: ["greetings", "introductions", "saying thank you"],
+    },
+  },
+  {
+    id: "japanese-hello",
+    unitId: "japanese-foundations",
+    languageId: "japanese",
+    order: 1,
+    title: "Say hello in Japanese",
+    description: "Learn a polite greeting and a simple thank-you.",
+    goals: [
+      { id: "japanese-hello-goal-1", text: "Say a polite Japanese greeting" },
+      { id: "japanese-hello-goal-2", text: "Recognize arigatou" },
+    ],
+    vocabulary: [
+      { id: "konnichiwa", word: "こんにちは", translation: "hello", pronunciation: "kon-nee-chee-wah", partOfSpeech: "greeting" },
+      { id: "arigatou", word: "ありがとう", translation: "thank you", pronunciation: "ah-ree-gah-toh", partOfSpeech: "expression" },
+      { id: "tomodachi", word: "ともだち", translation: "friend", pronunciation: "toh-moh-dah-chee", partOfSpeech: "noun" },
+    ],
+    phrases: [
+      { id: "japanese-hello", text: "こんにちは", translation: "Hello", pronunciation: "kon-nee-chee-wah" },
+      { id: "japanese-thank-you", text: "ありがとう", translation: "Thank you", pronunciation: "ah-ree-gah-toh" },
+    ],
+    activities: [
+      {
+        id: "japanese-hello-choice",
+        type: "multiple-choice",
+        prompt: "What does こんにちは mean?",
+        options: ["Thank you", "Friend", "Hello"],
+        answer: "Hello",
+        points: 10,
+      },
+      {
+        id: "japanese-thank-you-listening",
+        type: "listening",
+        prompt: "Listen and choose the phrase you hear.",
+        phraseId: "japanese-thank-you",
+        answer: "ありがとう",
+        points: 10,
+      },
+    ],
+    aiTeacherPrompt: {
+      role: "A warm beginner Japanese teacher",
+      objective: "Help the learner recognize and say basic polite expressions.",
+      systemPrompt: "Use romaji and English support alongside Japanese. Keep practice short, model each phrase clearly, and explain that these are polite everyday expressions.",
+      openingMessage: "こんにちは! Let’s practice your first Japanese greeting.",
+      suggestedTopics: ["greetings", "thank-you phrases", "politeness"],
+    },
+  },
+];
