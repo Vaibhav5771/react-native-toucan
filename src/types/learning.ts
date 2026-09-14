@@ -90,6 +90,8 @@ export interface AITeacherPrompt {
   suggestedTopics: string[];
 }
 
+export type LessonImageKey = "parisCafe" | "earth" | "treasure" | "palace";
+
 export interface Lesson {
   id: string;
   unitId: string;
@@ -97,6 +99,8 @@ export interface Lesson {
   order: number;
   title: string;
   description: string;
+  imageKey?: LessonImageKey;
+  imageUrl?: string;
   goals: LessonGoal[];
   vocabulary: VocabularyItem[];
   phrases: Phrase[];
