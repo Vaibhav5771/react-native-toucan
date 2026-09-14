@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Image } from "@/components/image";
+import { PrimaryButton } from "@/components/primary-button";
 import { images } from "@/constants/images";
 
 export default function Onboarding() {
@@ -51,13 +52,11 @@ export default function Onboarding() {
           </View>
         </View>
 
-        <Pressable
+        <PrimaryButton
           onPress={() => router.push("/sign-up")}
-          className="flex-row items-center justify-center gap-2 rounded-pill bg-tucana-teal py-4 active:opacity-80"
-        >
-          <Text className="font-poppins-semibold text-body-lg text-background">Get Started</Text>
-          <Text className="font-poppins-semibold text-body-lg text-background">›</Text>
-        </Pressable>
+          label="Get Started"
+          showArrow
+        />
       </View>
     </SafeAreaView>
   );

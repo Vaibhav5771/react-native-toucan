@@ -1,14 +1,13 @@
 import { useAuth } from "@clerk/expo";
-import { Link, Redirect } from "expo-router";
-import { Pressable, Text, View } from "react-native";
-
-import { Image } from "@/components/image";
-import { images } from "@/constants/images";
+import { Redirect } from "expo-router";
+import { useLanguageStore } from "@/store/language";
 
 export default function Index() {
-  const { isLoaded, isSignedIn, signOut } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
+  const selectedLanguageId = useLanguageStore((state) => state.selectedLanguageId);
+  const hasHydrated = useLanguageStore((state) => state.hasHydrated);
 
-  if (!isLoaded) {
+  if (!isLoaded || !hasHydrated) {
     return null;
   }
 
@@ -16,19 +15,9 @@ export default function Index() {
     return <Redirect href="/onboarding" />;
   }
 
-  return (
-    <View className="flex-1 items-center justify-center gap-4 bg-background">
-      <Image source={images.toucan} contentFit="contain" className="h-36 w-40" />
-      <Text className="font-poppins-bold text-h1 text-ink">Tucana</Text>
-      <Link href="/onboarding" className="font-poppins-semibold text-body-md text-tucana-teal-deep">
-        View onboarding
-      </Link>
-      <Pressable
-        onPress={() => signOut()}
-        className="rounded-pill border border-tucana-teal-deep px-6 py-3 active:opacity-70"
-      >
-        <Text className="font-poppins-semibold text-body-md text-tucana-teal-deep">Sign out</Text>
-      </Pressable>
-    </View>
-  );
+  if (!selectedLanguageId) {
+    return <Redirect href="/language-selection" />;
+  }
+
+  return <Redirect href="/home" />;
 }
